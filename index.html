@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <title>Главная страница</title>
+<style>
+/* Стили модального окна */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+}
+
+.close:hover {
+    color: black;
+}
+
+.product-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Стили для формы заказа */
+.order-form {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-family: 'Raleway', sans-serif;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: 'Raleway', sans-serif;
+}
+
+.size-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.size-option {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.size-option:hover {
+    background-color: #f5f5f5;
+}
+
+.size-option.selected {
+    background-color: #8b6b61;
+    color: white;
+    border-color: #8b6b61;
+}
+
+.btn-submit {
+    background-color: #8b6b61;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #6d4c41;
+}
+
+.product-info {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.product-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 20px;
+}
+
+.product-details h3 {
+    margin-top: 0;
+    font-family: 'Cormorant Garamond', serif;
+    color: #2c1810;
+}
+
+/* Стили для корзины */
+.cart-icon {
+    position: relative;
+    cursor: pointer;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #8b6b61;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.cart-modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.cart-content {
+    background-color: #fefefe;
+    margin: 0;
+    margin-left: auto;
+    padding: 20px;
+    width: 400px;
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.cart-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: #2c1810;
+    margin: 0;
+}
+
+.cart-items {
+    margin-bottom: 20px;
+}
+
+.cart-item {
+    display: flex;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 15px;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+}
+
+.cart-item-name {
+    font-weight: 500;
+    margin-bottom: 5px;
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.cart-item-size {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.cart-item-remove {
+    color: #dc3545;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0;
+}
+
+.cart-summary {
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+    margin-top: 15px;
+}
+
+.cart-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.cart-empty {
+    text-align: center;
+    padding: 30px 0;
+    color: #6c757d;
+}
+
+.cart-empty i {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    color: #ddd;
+}
+
+.btn-checkout {
+    background-color: #8b6b61;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.btn-checkout:hover {
+    background-color: #6d4c41;
+}
+
+.btn-checkout:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+        /* Стили для навигации */
+        .navbar-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 400;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #8b6b61 !important;
+        }
+        
+        /* Стили для герой секции */
+        .hero-section {
+            background-image: url('img/2.jpg');
+            background-size: cover; /* растягивает изображение на всю секцию */
+            background-position: center; /* центрирует изображение */
+            background-repeat: no-repeat;
+            height: 100vh; /* высота на весь экран */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: #2c1810;
+        }
+        
+        .hero-subtitle {
+            font-family: 'Raleway', sans-serif;
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn-primary {
+            background-color: #8b6b61;
+            border-color: #8b6b61;
+            padding: 12px 30px;
+            font-family: 'Raleway', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #6d4c41;
+            border-color: #6d4c41;
+            transform: translateY(-2px);
+        }
+        
+        /* Стили для заголовка каталога */
+        .catalog-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #2c1810;
+        }
+        
+        /* Стили для карточек */
+        .card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            color: #2c1810;
+        }
+        
+        .card-text {
+            font-family: 'Raleway', sans-serif;
+            color: #6c757d;
+        }
+        
+        /* Отзывы */
+.testimonials-section {
+    padding: 80px 0;
+    background: linear-gradient(135deg, #8b6b61 0%, #6d4c41 100%);
+    color: white;
+}
+
+.testimonial-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 2rem;
+    margin: 1rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    min-height: 280px; 
+    display: flex;
+    flex-direction: column;
+}
+
+.testimonial-content {
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+}
+
+.testimonial-text {
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    flex-grow: 1;
+}
+
+.testimonial-author {
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+.stars {
+    color: #ffd700;
+    margin-bottom: 1rem;
+}
+        /* Стили для секции "О нас" */
+        .about-section {
+            padding: 80px 0;
+            background-color: #f8f9fa;
+        }
+        
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #2c1810;
+        }
+        
+        .about-section p {
+            font-family: 'Raleway', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #495057;
+            margin-bottom: 1.5rem;
+        }
+         .newsletter-section {
+            padding: 60px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .newsletter-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .form-control {
+            padding: 12px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-family: 'Raleway', sans-serif;
+        }
+        
+        .form-control:focus {
+            border-color: #8b6b61;
+            box-shadow: 0 0 0 0.2rem rgba(139, 107, 97, 0.25);
+        }
+        /* Стили для футера */
+        footer {
+            background-color: #2c1810;
+            color: #fff;
+            padding: 60px 0 20px;
+        }
+        
+        .footer-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: #f8f9fa;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+            font-family: 'Raleway', sans-serif;
+        }
+        
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: #fff;
+        }
+        
+        .footer-links i {
+            margin-right: 10px;
+            color: #8b6b61;
+        }
+        
+        .social-links {
+            margin-top: 1.5rem;
+        }
+        
+        .social-links a {
+            color: #adb5bd;
+            font-size: 1.5rem;
+            margin-right: 15px;
+            transition: color 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: #8b6b61;
+        }
+        
+        .copyright {
+            border-top: 1px solid #495057;
+            padding-top: 20px;
+            margin-top: 40px;
+            text-align: center;
+            color: #adb5bd;
+            font-family: 'Raleway', sans-serif;
+        }
+        
+        /* Отступы между секциями */
+        .container.mt-5 {
+            margin-top: 5rem !important;
+        }
+        
+        .about-section {
+            margin-top: 5rem;
+        }
+    </style>
+</head>
+<body>
+    <!--Навигация-->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">TACTILA</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 d-flex justify-content-center align-items-center gap-4">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#info">О нас</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#catalog">Каталог</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Контакты</a>
+                    </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск"/>
+                </form>
+                <!-- Иконка корзины -->
+                <div class="cart-icon ms-3" id="cartIcon">
+                    <i class="bi bi-cart3" style="font-size: 1.5rem;"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Герой секция -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Уют и элегантность в каждом моменте</h1>
+                <p class="hero-subtitle">Домашняя одежда премиум-класса для современных женщин, ценящих комфорт и стиль</p>
+            </div>
+        </div>
+    </section>
+
+    <!--Категории-->
+    <div class="container mt-5">
+        <!-- Заголовок каталога -->
+        <h2 class="catalog-title" id="catalog">Каталог</h2>
+        
+        <div class="row">
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="card">
+                    <img src="img/Комплект1.webp" class="card-img-top" alt="Комплект 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Комплект "Элегантность"</h5>
+                        <a href="#" class="btn btn-primary view-btn" data-product="Комплект 'Элегантность'" data-image="img/Комплект1.webp">Смотреть</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="card">
+                    <img src="img/Комплект2.webp" class="card-img-top" alt="Комплект 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Комплект "Уют"</h5>
+                        <a href="#" class="btn btn-primary view-btn" data-product="Комплект 'Уют'" data-image="img/Комплект2.webp">Смотреть</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="card">
+                    <img src="img/Комплект3.webp" class="card-img-top" alt="Комплект 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Комплект "Роскошь"</h5>
+                        <a href="#" class="btn btn-primary view-btn" data-product="Комплект 'Роскошь'" data-image="img/Комплект3.webp">Смотреть</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="card">
+                    <img src="img/Комплект4.webp" class="card-img-top" alt="Комплект 4">
+                    <div class="card-body">
+                        <h5 class="card-title">Комплект "Мечта"</h5>
+                        <a href="#" class="btn btn-primary view-btn" data-product="Комплект 'Мечта'" data-image="img/Комплект4.webp">Смотреть</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для заказа -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="product-info">
+                <img id="modalProductImage" src="" alt="Товар" class="product-image">
+                <div class="product-details">
+                    <h3 id="modalProductName"></h3>
+                    <p>Выберите размер и заполните данные для заказа</p>
+                </div>
+            </div>
+            
+            <form id="orderForm" class="order-form">
+                <div class="form-group">
+                    <label>Размер:</label>
+                    <div class="size-selector">
+                        <div class="size-option" data-size="XS">XS</div>
+                        <div class="size-option" data-size="S">S</div>
+                        <div class="size-option" data-size="M">M</div>
+                        <div class="size-option" data-size="L">L</div>
+                        <div class="size-option" data-size="XL">XL</div>
+                    </div>
+                    <input type="hidden" id="selectedSize" name="size" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fullName">ФИО:</label>
+                    <input type="text" id="fullName" name="fullName" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Телефон:</label>
+                    <input type="tel" id="phone" name="phone" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="city">Город:</label>
+                    <input type="text" id="city" name="city" class="form-control" required>
+                </div>
+                
+                <button type="submit" class="btn-submit">Добавить в корзину</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно корзины -->
+    <div id="cartModal" class="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3 class="cart-title">Корзина</h3>
+                <span class="close" id="closeCart">&times;</span>
+            </div>
+            
+            <div class="cart-items" id="cartItems">
+                <!-- Отображение товаров в корзине -->
+                <div class="cart-empty">
+                    <i class="bi bi-cart-x"></i>
+                    <p>Ваша корзина пуста</p>
+                </div>
+            </div>
+            
+            <div class="cart-summary" id="cartSummary" style="display: none;">
+                <div class="cart-total">
+                    <span>Итого:</span>
+                    <span id="cartTotal">0 руб.</span>
+                </div>
+                <button class="btn-checkout" id="checkoutBtn">Оформить заказ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Отзывы -->
+    <section class="testimonials-section">
+        <div class="container">
+            <h2 class="section-title text-center text-white">Отзывы наших клиентов</h2>
+            <div class="row">
+                <div class="col-md-4 fade-in">
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="testimonial-text">"Невероятно мягкий и приятный к телу комплект. Ношу уже полгода, цвет не выцветает, ткань как новая. Обязательно буду заказывать еще!"</p>
+                        <p class="testimonial-author">- Анна К., Москва</p>
+                    </div>
+                </div>
+                <div class="col-md-4 fade-in">
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-half"></i>
+                        </div>
+                        <p class="testimonial-text">"Качество превосходит все ожидания! Шелк просто божественный, идеально сидит по фигуре. Доставка быстрая, упаковка красивая."</p>
+                        <p class="testimonial-author">- Мария С., Санкт-Петербург</p>
+                    </div>
+                </div>
+                <div class="col-md-4 fade-in">
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="testimonial-text">"Покупала в подарок подруге - она в восторге! Теперь сама хочу такой же комплект. Отличный сервис и качество!"</p>
+                        <p class="testimonial-author">- Елена В., Ярославль</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- О нас -->
+    <section class="about-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <img src="img/логотип.jpg" class="w-100" alt="О нас">
+                </div>
+                <div class="col-md-6">
+                    <h2 class="section-title text-start" id="info">О TACTILA</h2>
+                    <p>TACTILA — это бренд домашней женской одежды, созданный для тех, кто ценит уют, комфорт и элегантность в повседневной жизни.</p>
+                    <p>Мы используем только натуральные ткани высочайшего качества: шелк, хлопок, бамбук и лен, чтобы обеспечить максимальный комфорт для вашей кожи.</p>
+                    <p>Каждая деталь нашей одежды продумана до мелочей — от кроя до отделки, чтобы вы чувствовали себя особенной даже в домашней обстановке.</p>
+                    <a href="#" class="btn btn-primary mt-3">Узнать больше</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Рассылка -->
+    <section class="newsletter-section">
+        <div class="container text-center">
+            <h2 class="section-title">Будьте в курсе новинок</h2>
+            <p class="mb-4">Подпишитесь на рассылку и получите скидку 10% на первый заказ</p>
+            <div class="newsletter-form">
+                <div class="input-group">
+                    <input type="email" class="form-control" placeholder="Ваш email" aria-label="Ваш email">
+                    <button class="btn btn-primary" type="button">Подписаться</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3 class="footer-title">TACTILA</h3>
+                    <p>Домашняя женская одежда премиум-класса. Уют и элегантность в каждом моменте.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-pinterest"></i></a>
+                        <a href="#"><i class="bi bi-telegram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-md-2">
+                    <h3 class="footer-title">Информация</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">О нас</a></li>
+                        <li><a href="#">Доставка и оплата</a></li>
+                        <li><a href="#">Возврат</a></li>
+                        <li><a href="#">Размерная сетка</a></li>
+                        <li><a href="#">Уход за изделиями</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h3 class="footer-title" id="contact">Контакты</h3>
+                    <ul class="footer-links">
+                        <li><i class="bi bi-geo-alt"></i> Ярославль, ул. Терешковой, 15</li>
+                        <li><i class="bi bi-telephone"></i> +7 (495) 123-45-67</li>
+                        <li><i class="bi bi-envelope"></i> info@tactila.ru</li>
+                        <li><i class="bi bi-clock"></i> Пн-Пт: 9:00-20:00</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Название бренда. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Подключение Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    
+    <script>
+        // Получаем элементы модального окна
+        const modal = document.getElementById('orderModal');
+        const closeBtn = document.querySelector('.close');
+        const viewButtons = document.querySelectorAll('.view-btn');
+        const sizeOptions = document.querySelectorAll('.size-option');
+        const selectedSizeInput = document.getElementById('selectedSize');
+        const modalProductName = document.getElementById('modalProductName');
+        const modalProductImage = document.getElementById('modalProductImage');
+        const orderForm = document.getElementById('orderForm');
+        
+        // Элементы корзины
+        const cartIcon = document.getElementById('cartIcon');
+        const cartCount = document.getElementById('cartCount');
+        const cartModal = document.getElementById('cartModal');
+        const closeCart = document.getElementById('closeCart');
+        const cartItems = document.getElementById('cartItems');
+        const cartSummary = document.getElementById('cartSummary');
+        const cartTotal = document.getElementById('cartTotal');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        
+        // Массив для хранения товаров в корзине
+        let cart = [];
+        
+        // Загрузка корзины из localStorage при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedCart = localStorage.getItem('tactilaCart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+                updateCartUI();
+            }
+        });
+        
+        // Обработчик открытия модального окна
+        viewButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const productName = this.getAttribute('data-product');
+                const productImage = this.getAttribute('data-image');
+                
+                modalProductName.textContent = productName;
+                modalProductImage.src = productImage;
+                modal.style.display = 'block';
+                
+                // Сброс формы
+                orderForm.reset();
+                sizeOptions.forEach(option => option.classList.remove('selected'));
+                selectedSizeInput.value = '';
+            });
+        });
+        
+        // Обработчик закрытия модального окна
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        
+        // Закрытие модального окна при клике вне его
+        window.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // Выбор размера
+        sizeOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                sizeOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedSizeInput.value = this.getAttribute('data-size');
+            });
+        });
+        
+        // Обработка отправки формы
+        orderForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Проверка выбранного размера
+            if (!selectedSizeInput.value) {
+                alert('Пожалуйста, выберите размер');
+                return;
+            }
+            
+            // Сбор данных формы
+            const formData = {
+                product: modalProductName.textContent,
+                image: modalProductImage.src,
+                size: selectedSizeInput.value,
+                fullName: document.getElementById('fullName').value,
+                phone: document.getElementById('phone').value,
+                city: document.getElementById('city').value,
+                id: Date.now() // Уникальный идентификатор для товара в корзине
+            };
+            
+            // Добавление товара в корзину
+            cart.push(formData);
+            
+            // Сохранение корзины в localStorage
+            localStorage.setItem('tactilaCart', JSON.stringify(cart));
+            
+            // Обновление интерфейса корзины
+            updateCartUI();
+            
+            // Закрытие модального окна
+            modal.style.display = 'none';
+            
+            // Оповещение пользователя
+            alert('Товар добавлен в корзину!');
+        });
+        
+        // Открытие корзины
+        cartIcon.addEventListener('click', function() {
+            cartModal.style.display = 'block';
+        });
+        
+        // Закрытие корзины
+        closeCart.addEventListener('click', function() {
+            cartModal.style.display = 'none';
+        });
+        
+        // Закрытие корзины при клике вне ее
+        window.addEventListener('click', function(e) {
+            if (e.target === cartModal) {
+                cartModal.style.display = 'none';
+            }
+        });
+        
+        // Обновление интерфейса корзины
+        function updateCartUI() {
+            // Обновление счетчика товаров
+            cartCount.textContent = cart.length;
+            
+            // Очистка содержимого корзины
+            cartItems.innerHTML = '';
+            
+            if (cart.length === 0) {
+                // Показ сообщения о пустой корзине
+                cartItems.innerHTML = `
+                    <div class="cart-empty">
+                        <i class="bi bi-cart-x"></i>
+                        <p>Ваша корзина пуста</p>
+                    </div>
+                `;
+                cartSummary.style.display = 'none';
+            } else {
+                // Отображение товаров в корзине
+                cart.forEach(item => {
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <img src="${item.image}" alt="${item.product}" class="cart-item-image">
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${item.product}</div>
+                            <div class="cart-item-size">Размер: ${item.size}</div>
+                            <div class="cart-item-size">${item.fullName}</div>
+                            <div class="cart-item-size">${item.phone}</div>
+                            <div class="cart-item-size">${item.city}</div>
+                            <button class="cart-item-remove" data-id="${item.id}">Удалить</button>
+                        </div>
+                    `;
+                    cartItems.appendChild(cartItem);
+                });
+                
+                // Показ итоговой суммы
+                cartSummary.style.display = 'block';
+                cartTotal.textContent = `${cart.length * 3500} руб.`;
+                
+                // Добавление обработчиков для кнопок удаления
+                const removeButtons = document.querySelectorAll('.cart-item-remove');
+                removeButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const itemId = parseInt(this.getAttribute('data-id'));
+                        removeFromCart(itemId);
+                    });
+                });
+            }
+        }
+        
+        // Удаление товара из корзины
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            localStorage.setItem('tactilaCart', JSON.stringify(cart));
+            updateCartUI();
+        }
+        
+        // Оформление заказа
+        checkoutBtn.addEventListener('click', function() {
+            if (cart.length === 0) {
+                alert('Корзина пуста!');
+                return;
+            }
+            
+            // Формирование текста заказа для отправки по почте
+            let orderText = 'Новый заказ с сайта TACTILA:\n\n';
+            
+            cart.forEach((item, index) => {
+                orderText += `Товар ${index + 1}:\n`;
+                orderText += `  Название: ${item.product}\n`;
+                orderText += `  Размер: ${item.size}\n`;
+                orderText += `  ФИО: ${item.fullName}\n`;
+                orderText += `  Телефон: ${item.phone}\n`;
+                orderText += `  Город: ${item.city}\n\n`;
+            });
+            
+            orderText += `Итого товаров: ${cart.length}\n`;
+            orderText += `Общая сумма: ${cart.length * 3500} руб.`;
+            
+            // Отправка заказа по почте
+            const mailtoLink = `mailto:info@tactila.ru?subject=Заказ с сайта TACTILA&body=${encodeURIComponent(orderText)}`;
+            window.location.href = mailtoLink;
+            
+            // Очистка корзины после оформления заказа
+            cart = [];
+            localStorage.removeItem('tactilaCart');
+            updateCartUI();
+            
+            // Закрытие корзины
+            cartModal.style.display = 'none';
+            
+            alert('Заказ оформлен! Откроется почтовый клиент для отправки заказа.');
+        });
+    </script>
+</body>
+</html>
